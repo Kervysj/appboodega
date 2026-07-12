@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bodega — Sistema de Gestión Offline</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- ============ TOAST DE CONFIRMACIÓN ============ -->
+<div id="toast" class="toast hidden"></div>
+
+<!-- ============ PANTALLA LOGIN ============ -->
+<section id="pantalla-login" class="pantalla activa">
+  <div class="login-card">
+    <div class="login-brand">
+      <h1>Bodega</h1>
+      <p>Sistema de gestión offline</p>
+    </div>
+    <form id="form-login">
+      <label>Usuario</label>
+      <select id="login-usuario" required></select>
+      <label>Clave</label>
+      <input type="password" id="login-clave" placeholder="••••••••" autocomplete="current-password" required>
+      <div id="login-error" class="error hidden"></div>
+      <button type="submit" class="btn btn-primary btn-block">Entrar</button>
+    </form>
+    <button id="btn-abrir-reset" class="link-reset" title="Reset total del sistema">ⓘ Restablecer sistema</button>
+  </div>
+</section>
+
+<!-- ============ MODAL RESET TOTAL ============ -->
+<div id="modal-reset" class="modal-overlay hidden">
+  <div class="modal">
+    <h2>⚠ Reset total del sistema</h2>
+    <p>Esto borra ventas, deudores (cuentas por cobrar), cuentas por pagar, créditos y cuadres. No se puede deshacer.</p>
+    <p style="font-size:13px;color:var(--tinta-suave);">
+      Queda: el usuario <strong>admin</strong> con su clave por defecto (<strong>adri2712</strong>), y el inventario se
+      deja con <strong>1 solo producto</strong> de referencia (se borran los cajeros creados). Si ya tenías un
+      respaldo (archivo Excel maestro o descarga manual), esa información queda a salvo en ese archivo aparte.
+    </p>
+    <label>Clave de reset</label>
+    <input type="password" id="reset-clave" placeholder="Clave de seguridad">
+    <div id="reset-error" class="error hidden"></div>
+    <div class="modal-botones">
+      <button class="btn btn-secundario" data-cerrar-modal="modal-reset">Cancelar</button>
+      <button class="btn btn-peligro" id="btn-confirmar-reset">Borrar todo</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ MODAL RECORDATORIO DE TASA (aparece al entrar) ============ -->
+<div id="modal-tasa-recordatorio" class="modal-overlay hidden">
+  <div class="modal">
+    <button class="btn-cerrar-x" data-cerrar-modal="modal-tasa-recordatorio" aria-label="Cerrar" title="Cerrar">✕</button>
+    <h2>💲 Actualiza el dólar del día</h2>
+    <p>Antes de facturar o registrar deudas, confirma que la <strong>tasa del día</strong> esté correcta. Todos los montos en $ dependen de ella.</p>
+    <p>Tasa actual guardada: <strong id="rt-tasa-actual">—</strong> <span id="rt-tasa-fecha" style="color:var(--tinta-suave);"></span></p>
+    <div class="campo"><label>Tasa del día (Bs/$)</label><input type="number" id="rt-input-tasa" step="0.01" min="0"></div>
+    <div class="modal-botones">
+      <button class="btn btn-secundario" data-cerrar-modal="modal-tasa-recordatorio">Ya está correcta (OK)</button>
+      <button class="btn btn-primary" id="rt-btn-guardar-tasa">Guardar nueva tasa</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SHELL PRINCIPAL (post-login) ============ -->
+<section id="pantalla-app" class="pantalla">
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <h2>Bodega</h2>
+      <span id="sidebar-usuario"></span>
+    </div>
+    <nav id="menu-nav"></nav>
+    <div class="sidebar-tasa">
+      <label>Tasa del día (Bs/$)</label>
+      <input type="number" id="input-tasa" step="0.01" min="0">
+      <button id="btn-guardar-tasa" class="btn btn-mini">Guardar</button>
+    </div>
+    <div id="autoguardado-estado" class="autoguardado-estado">● Autoguardado: no configurado</div>
+    <button id="btn-logout" class="btn btn-secundario btn-block">Salir</button>
+  </aside>
+
+  <main id="contenido-principal" class="contenido"></main>
+</section>
+
+<!-- ============ MODAL GENÉRICO (para formularios) ============ -->
+<div id="modal-generico" class="modal-overlay hidden">
+  <div class="modal modal-ancho" id="modal-generico-cuerpo"></div>
+</div>
+
+<!-- Librerías locales (sin CDN, 100% offline) -->
+<script src="vendor/xlsx.full.min.js"></script>
+<script src="vendor/jspdf.umd.min.js"></script>
+<script src="vendor/jspdf.plugin.autotable.min.js"></script>
+
+<!-- Módulos de la app -->
+<script src="js/db.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/inventario.js"></script>
+<script src="js/ventas.js"></script>
+<script src="js/deudores.js"></script>
+<script src="js/creditos.js"></script>
+<script src="js/cuentasPagar.js"></script>
+<script src="js/cuadre.js"></script>
+<script src="js/backup.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
